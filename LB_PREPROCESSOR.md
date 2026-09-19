@@ -1,6 +1,9 @@
 # LabelBasic Preprocessor Wrapper
 
-`lb` is a shell script wrapper that preprocesses LabelBasic source files through the C preprocessor (`cpp`) before executing them. This allows you to use C preprocessor directives like `#include`, `#define`, and other macros in LabelBasic programs.
+`lb` is a shell script wrapper that preprocesses LabelBasic source files
+through the C preprocessor (`cpp`) before executing them. This allows you
+to use C preprocessor directives like `#include`, `#define`, and other
+macros in LabelBasic programs.
 
 ## Installation
 

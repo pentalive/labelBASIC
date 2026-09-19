@@ -3,3 +3,4 @@ labelbasic: interp.c
 
 install: /usr/bin/labelbasic
 	cp labelbasic /usr/bin/labelbasic
+	cp lb         /usr/bin/lb
