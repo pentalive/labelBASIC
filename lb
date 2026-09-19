@@ -1,0 +1,35 @@
+#!/bin/bash
+# lb - LabelBasic preprocessor wrapper
+# Usage: lb <source.lbas> [args...]
+
+set -e
+
+if [ $# -lt 1 ]; then
+    echo "Usage: lb <source.lbas> [args...]"
+    exit 1
+fi
+
+sourcefile="$1"
+shift
+
+# Check if source file exists
+if [ ! -f "$sourcefile" ]; then
+    echo "lb: file not found: $sourcefile" >&2
+    exit 1
+fi
+
+# Get the directory of the source file
+sourcedir="$(cd "$(dirname "$sourcefile")" && pwd)"
+sourcename="$(basename "$sourcefile")"
+
+# Create temp file for preprocessed output
+tempfile=$(mktemp /tmp/labelbasic.XXXXXX.lbas)
+trap "rm -f $tempfile" EXIT
+
+# Run cpp with math.h in include path
+# -P: omit line directives
+# -I: include directory (current dir and source dir)
+cpp -P -I. -I"$sourcedir" -I/usr/local/include "$sourcefile" > "$tempfile"
+
+# Execute the preprocessed program
+labelbasic "$tempfile" "$@"

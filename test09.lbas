@@ -1,0 +1,19 @@
+; test09    Testing print nocr()
+;
+;
+
+Begin:
+        format " %g "
+        xtend cls home
+        print " Testing print nocr() "
+        print
+        
+        let n = 1
+        do
+            print nocr(), n
+            let n = n + 1
+        next until n > 9
+        print
+
+        end
+

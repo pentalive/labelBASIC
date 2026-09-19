@@ -1,0 +1,64 @@
+
+;
+; Line
+;
+begin:
+   Mat line(400)
+   Mat hist(10)
+   format "%g"
+
+; Initialize histogram
+   let i = 0
+   do
+     let hist(i) = 0
+     let i = i + 1
+   next while i < 10
+   let hist(0) = 400
+   
+
+; Initialize Line
+
+   let i = 0
+   do
+      Let line(i) = 0
+      let i = i + 1
+   next while i <= 399
+   print "...done"
+
+; Select/increment loop
+   let step = 0
+   let maxthis = 0
+   do
+      let this = rnd(400)
+      if this <= maxthis then goto notmax
+      let maxthis = this
+notmax:
+      let c = line(this)
+      let hist(c) = hist(c) - 1
+      let line(this) = line(this) + 1
+      let c = line(this)
+      let hist(c) = hist(c) + 1
+      let step = step + 1
+   next while line(this) < 9
+
+; Print Report
+   print "Output Report"
+   let i = 0
+   let sum = 0
+   do
+      let sum = sum + line(i)
+      let i = i + 1
+   next while i<400
+   print "Body Average :",sum/400
+   print "Final Cell:   ",this
+
+   print
+   print "Histogram Values"
+   print
+   let i = 0
+   do
+     print i,"|",hist(i)
+     let i = i + 1
+   next while i<10
+   print "steps",step
+   stop

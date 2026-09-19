@@ -1,0 +1,59 @@
+; test07  
+; String arrays
+;
+Begin:
+    Mat $color(8)
+    Let $color(0) = " BLK "
+    Let $color(4) = " BLU "
+    If $color(4) == " BLU " Then Goto Ok1
+    Print "FAIL: string array read/write"
+    Goto Done1
+Ok1:
+    Print "OK: string array read/write"
+Done1:
+    
+    ; looping over a string array
+    Let i = 0
+    Do While i < 8
+        Let $color(i) = "color" + $str(i)
+        Let i = i + 1
+    Next
+    Print $color(0), $color(3), $color(7)
+
+; numeric arrays should still work exactly as before
+    Mat nums(5)
+    Let nums(2) = 42
+    If nums(2) == 42 Then Goto Ok2
+    Print "FAIL: numeric array regressed"
+    Goto Done2
+Ok2:
+    Print "OK: numeric array still works"
+Done2:
+
+; auto-convert instead of silent-drop: number into a numeric array via a string
+    Mat n2(3)
+    Let n2(0) = $str(99)
+    If n2(0) == 99 Then Goto Ok3
+    Print "FAIL: string->numeric array auto-convert"
+    Goto Done3
+Ok3:
+     Print "OK: string->numeric array auto-converts"
+Done3:
+
+; auto-convert instead of silent-drop: number into a plain $ scalar
+    Let n = 7
+    Let $s = n
+    If $s == "7" Then Goto Ok4
+    Print "FAIL: number->scalar $ auto-convert"
+    Goto Done4
+Ok4:
+    Print "OK: number->scalar $ auto-converts"
+Done4:
+
+; Can we convert the other way?
+    let $x = "42"
+    let x  = $x
+    print
+    print "If 42 is printed then you can convert string => number : ",x
+
+    Stop

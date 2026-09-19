@@ -1,0 +1,27 @@
+; test 12
+; Xtend instructions
+;
+Begin:
+    Xtend Hue Blue Yellow
+    Print "blue on yellow, by name"
+    Xtend Hue 4 3
+    Print "blue on yellow, by number/should look identical to the line above"
+    
+    Let fg = 1
+    Let bg = 6
+    Xtend Hue fg bg
+    Print "red on cyan, via variables"
+    
+    Xtend Hue White Black
+    Print "back to white on black"
+    
+    ASK "ANY NUMBER TO CONTINUE ",X
+    
+    Xtend CLS
+    Xtend HOME
+    Print "cursor should now be at row 1, col 1, screen cleared"
+    
+    Xtend At 5 10
+    Print "This line starts at row 5, col 10"
+    
+    Stop

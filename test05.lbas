@@ -1,0 +1,11 @@
+; test05 - execute sub process
+;
+Begin:
+    Do
+       Ask "Shell Command Please: ",$shell
+       if $shell == "exit" then break
+       ! $shell
+    Next
+
+    Stop
+

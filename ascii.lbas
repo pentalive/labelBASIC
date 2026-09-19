@@ -1,0 +1,13 @@
+; ascii.lbas                                             
+; A demonstration of the use of ascii codes to set       
+; graphic rendition or clear the screen (or any other    
+; ascii action.                                          
+
+Begin:
+   Print $chr(27) + "[2J"
+   Print $chr(27) + "[0;1;42;34m"
+   Print "Hello!" + $chr(27) + "[0m"
+   Print
+   Print
+   Stop
+

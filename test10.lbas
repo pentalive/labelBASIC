@@ -1,0 +1,40 @@
+; TEST10
+; print $str  check against 5.5 ANSI color
+; $str(number) -> plain string, no padding
+Begin:
+    print "Test 10 - Test various $str examples,and ansi color"
+    Print
+    Print $str(42)
+    Print $str(5.5)
+    Print $str(-3)
+    Print $str(0)
+    Print $str(100000)
+
+    Let $a = $str(42)
+    Let $b = "42"
+    If $a == $b Then Goto Match
+    Print "FAIL: dollar-str of 42 did not equal 42"
+    Goto Done
+Match:
+    Print "OK: dollar-str(42) == 42"
+
+Done:
+    If $str(5.5) == "5.5" Then Goto Match2
+    Print "FAIL: dollar-str of 5.5 did not equal 5.5"
+    Goto Done2
+Match2:
+    Print "OK: dollar-str(5.5) == 5.5"
+
+; ANSI escape codes: ESC [ <n> m ... ESC [ 0 m
+Done2:
+  Print "Now to build an ANSI escape sequence!"
+  Let $esc = $chr(27)
+  let color = 31
+  let default = 0
+  Let $red = $esc + "[" + $str(color) + "m"
+  Let $reset = $esc + "[" + $str(default) + "m"
+  Print $red + "this text is red" + $reset
+  Print "This text should be normal "
+  
+  Stop
+

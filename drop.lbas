@@ -1,0 +1,21 @@
+; Calculate time to fall for a range of heights
+;
+
+Begin:
+    let g = 9.8
+    let x = 10
+    let s = 1
+    print "  I   Distance (m)   Time (sec)    "
+    print " ===  =============  =============="
+
+    do
+       let t = (2.0 * x / g) ^ (1/2)
+       format " %03G"
+       let $line = $str(s)
+       format " %14.4F "
+       let $line = $line + $str(x) + $str(t) 
+       print $line
+       let x = x * 2
+       let s = s + 1
+    next while (s < 20)
+    stop

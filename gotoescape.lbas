@@ -1,0 +1,29 @@
+; gotoescape.lbas
+; Escape loop A early via Goto to a label outside it.
+begin:
+    Let i = 0
+    Do While i < 10
+       If i == 3 Then Goto Escaped
+       Print "loop A i=", i
+       Let i = i + 1
+    Next
+    Print "loop A finished normally -- should NOT print this"
+    Goto AfterA
+
+Escaped:
+    Print "escaped loop A early at i=", i
+
+AfterA:
+;
+; A completely separate loop B afterward, using Break -- confirms no
+; leftover state from loop A`s abnormal exit affects it.
+;
+    Let j = 0
+    Do
+        Print "loop B j=", j
+        Break if j==2
+        Let j = j + 1
+    Next while j<7
+    Print "loop B finished cleanly, j=", j
+
+    Stop

@@ -1,0 +1,39 @@
+begin:
+    format "%8.3f"
+    let sum = 0
+    let num = 0
+    do
+        ; pick a random number
+        let this = rnd(1000)
+
+        ; add to an average
+        let sum = sum + this
+        let num = num + 1
+        let avg = sum / num
+
+        ; find the difference betwenthe average and the current
+        ; number
+        let dif = this - avg
+
+        
+        if dif < 0 then let dif = dif * -1   ; abs(dif)
+        if num < 3 then let dif = 99         ; take at least 3 samples
+
+        let $line = ""
+
+        format "Num: %04g"
+        let $line = $line+$str(num)
+
+        format " This : %6g"
+        let $line = $line + $str(this)
+
+        format " Average :%8.3f"
+        let $line = $line + $str(avg)
+
+        format " Difference: %8.3f"
+        let $line = $line + $str(dif)
+        
+        print $line
+        
+    next while dif > .5
+    end

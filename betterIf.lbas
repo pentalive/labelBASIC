@@ -1,0 +1,34 @@
+; better If
+;
+; If can now execute any other statement conditionally
+; The next line after an if can be an `else` which
+; executes its line when the controlling if does not
+; execute its line
+;
+; Note - Because the Begin label is the entry point
+; subroutines like Hello can be put before the main
+; program.
+;
+
+Hello:
+    Print "Inside Hello"
+    Return
+
+Begin:
+    ask "What is x ?",x
+
+    if x==3 then ask "What for y?",y
+
+    If x==5 Then Print "X is 5"
+    else print "X is Not 5"
+
+    If x==3 Then Let y = 17
+
+    If y==17 Then Print "Changed Y to 17"
+
+    If x==3 Then Call Hello
+
+    Print "Back from CALL"
+
+    Stop
+

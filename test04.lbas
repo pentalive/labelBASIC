@@ -1,0 +1,21 @@
+; TEST04  String Functions
+;
+Begin:
+	Do
+		Ask "String     :",$String
+		If $String == "bye" then BREAK
+		Ask "Delimiterm :",$delim
+
+		Let $F = $front($string,$delim)
+		Let $B = $back($string,$delim)
+		let $J = $join($join($F,$delim),$B)
+		Let $A = $F + $delim + $B
+		If $A == $J then Print "Good! plus joins too "
+		Print "Join  ==> ",$J
+		Print "Front ==> ",$F
+		Print "Back  ==> ",$B
+        Print
+	Next
+	End
+
+

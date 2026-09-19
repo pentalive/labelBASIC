@@ -1,0 +1,13 @@
+; Test08
+; Testing output to a file and return to stdout
+
+Begin:
+ Open  "askredirect.txt", w
+ Print "print goes to the file"
+ Print "This prompt should still reach the real terminal"
+ ask   "even though Print is redirected: ",x
+ Print "you entered: ", x
+ Open  "OUT"
+ Print "back on stdout, done"
+ print "cat askredirect.txt to see the file "
+ Stop

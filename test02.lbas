@@ -1,0 +1,16 @@
+; TEST02
+; input testing/math/relationals
+;
+Begin:
+    Ask "What is your name? ",$name
+    Ask "Two numbers, comma separated: ",a,b
+    Print "Hello,",$name
+    Print "Sum =", a + b
+    If a > b Then Goto Bigger
+    Print "a is not greater than b"
+    Goto Done
+Bigger:
+    Print "a is greater than b"
+Done:
+    Print "finished"
+    End

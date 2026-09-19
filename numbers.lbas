@@ -1,0 +1,19 @@
+;
+; numbers - formatting fun
+;
+begin:
+  let $a = "|"
+  let n = 123456.789
+  print "Natural   ",n
+  let $a = $a + $str(n) + "|"
+  format "%'10.4f"
+  let $a = $a + $str(n) + "|"
+  print "Formatted ",n
+  let n = -123456.789
+  let $a = $a + $str(n) + "|"
+  print "Negative  ",n
+  print "|------|------------|-------------|"
+  print $a
+  end
+
+

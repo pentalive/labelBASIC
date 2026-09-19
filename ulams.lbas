@@ -1,0 +1,61 @@
+; Ulam`s Conjecture
+;
+; Also known as the 3n+1 conjecture. Given a positive integer this
+; program tracks the progress of that number to 1.  If a number is
+; even, divide by 2, if it is odd multiply by 3 and add 1.  repeat
+; and eventually you will reach 1.
+
+begin:
+    format " %8.0f "
+
+    let num = 0       ; our number
+    let beg = 0       ; the beginning number
+    let evn = 0       ; count evens
+    let odd = 0       ; count odds
+    let max = 0       ; note maximum
+    let stp = 0       ; step count
+    let drp = 0       ; the step num drops below the inital num
+
+    do
+        ask "Number:",num
+        if num == 0 then break
+
+        let beg = num
+        let evn = 0
+        let odd = 0
+        let max = 0
+        let stp = 0
+        let drp = 0
+        
+        do
+            if num % 2 == 0 then goto DoEven
+            else goto DoOdd
+doneEvenODD:
+            let stp = stp + 1
+            if num > max then let max = num
+            if num > beg or drp <> 0 then goto nodrop
+            let drp = stp
+            print "------------------------- fallen below initial ---"
+
+nodrop:
+            print "Step:",stp,"| number ",num,"| Max ",max
+            if stp % 20 == 0 then ask pause
+        next until num == 1
+        if drp > 0 then print " Fallen Below inital in step ",drp
+        print " Even Steps :",evn
+        print " Odd  Steps :",odd
+        
+    next
+    stop
+
+DoEven:
+    let num = num / 2
+    let evn = evn + 1
+    goto doneEvenODD
+
+DoOdd:
+    let num = (3 * num) + 1
+    let odd = odd + 1
+    goto doneEvenODD
+
+    stop

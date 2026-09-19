@@ -1,0 +1,32 @@
+; factr
+;
+; find the closest factor pair for an input number
+;
+        
+Begin:
+        let number = 0
+        Ask "A Positive Integer  :",number
+        if number == 0 then goto Finish 
+        Let Trial = 2
+
+TryNext:
+        if Number % Trial == 0 then goto Factor
+        Let trial = Trial + 1
+        if trial*trial > number then goto IsPrime
+        goto TryNext
+
+factor:
+        print number,"=",Trial,"*",number/Trial
+        goto Begin
+
+IsPrime:
+        print Number," Must be prime"
+        goto Begin
+
+Finish: 
+        Stop
+
+
+
+
+

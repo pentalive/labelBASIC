@@ -1,0 +1,43 @@
+; TEST03
+; string tests  NOT AND
+;
+Begin:
+    Ask "First String  :",$a
+    Ask "Second String :",$b
+    If $a == $b Then Goto Same
+    Print "strings differ"
+    Goto testsort
+Same:
+    Print "strings equal"
+
+testsort:
+    if $a > $b Then goto Osort
+    print $a," sorts before ",$b
+    goto Next1
+Osort:
+    print $b," sorts before ",$a
+Next1:
+    Let x = 5
+    Let y = 10
+    If NOT (x > y) Then Goto Small
+    Print "x is not small"
+    Goto Next2
+Small:
+    Print "x is small"
+Next2:
+
+    If x < y AND y < 20 Then Goto Both
+    Print "not both"
+    Goto Next3
+Both:
+    Print "both true"
+Next3:
+
+    If x <> y Then Goto Diff
+    Print "equal"
+    Goto End1
+Diff:
+    Print "x <> y is true"
+End1:
+    Stop
+

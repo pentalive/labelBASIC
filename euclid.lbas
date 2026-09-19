@@ -1,0 +1,30 @@
+; Euclid`s algorithm for finding the
+; greatest common denominator
+;
+Begin:
+    Print "Euclid's GCD Algorithm "
+    
+Another:
+    Ask "Please enter the first number  :",a
+    if a == 0 then goto done
+    
+    Ask "Please enter the second number :",b
+
+    Let steps = 0
+    Do while b <> 0
+       Let t = b
+       Let b = a % b
+       Let a = t
+       Let steps = steps + 1
+    Next
+
+    Print "Steps Taken",steps
+    Print "The GCD is ",a
+    Print
+    Print
+    goto Another
+
+done:
+    Print
+    Print
+    stop

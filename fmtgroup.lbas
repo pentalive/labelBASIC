@@ -1,0 +1,10 @@
+Begin:
+    let n = 1234567.89
+    print "Using "+n
+    print "Trying different format strings"
+    format "%' .2f"
+    print n
+    format "%'+016.2f"
+    print n
+    stop
+    

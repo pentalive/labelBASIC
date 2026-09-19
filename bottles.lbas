@@ -1,0 +1,27 @@
+; 99 bottles - a road trip sing along
+;
+Begin:
+    let bottles = 99
+
+    do
+        call plural
+        print "of beer on the wall "
+        call plural
+        print "of beer."
+        print "You take one down, Pass it around "
+        let bottles = bottles - 1
+        call plural
+        print "of beer on the wall"
+        print
+        print
+    next while bottles > 0
+    end
+
+plural:
+    if bottles <> 1 then print bottles," Bottles "
+        else print 1," Bottle "
+    return
+
+
+
+    

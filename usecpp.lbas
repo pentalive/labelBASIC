@@ -1,0 +1,8 @@
+#include "math.h"
+; This is a short program to test using cpp to
+; provide line functions for labelbasic programs
+; 
+begin:
+        print [sqrt(sqrt(81))] ^ 4
+        end
+        

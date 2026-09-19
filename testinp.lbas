@@ -1,0 +1,24 @@
+;
+; Reads and prints its own source file
+;
+
+Begin:
+    let $string = ""
+    let guard = 100
+    open "testinp.lbas",r
+    do
+        ask "",$string
+        print  $string
+        let guard = guard - 1
+        if guard == 0 then goto guarddog
+    next until eof()
+
+    print "End of file found"
+    stop
+
+guarddog:
+    Print "Woof!  the guard dog bites"
+    
+    end
+    
+

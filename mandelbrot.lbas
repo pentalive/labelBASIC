@@ -1,0 +1,96 @@
+; Mandelbrot Set Renderer
+; Displays the Mandelbrot set in ANSI colors to the terminal
+; Each character represents a pixel, colored by escape iteration count
+
+BEGIN:
+  format "%g"
+  
+  ; Screen dimensions
+  let width = 80
+  let height = 24
+  let max_iter = 100
+  
+  ; Mandelbrot bounds (real and imaginary axes)
+  let xmin = -2.5
+  let xmax = 1.0
+  let ymin = -1.25
+  let ymax = 1.25
+  
+  ; Calculate step sizes
+  let xstep = [xmax - xmin] / width
+  let ystep = [ymax - ymin] / height
+  
+  ; Clear screen with ANSI codes
+  print $chr(27) "[2J"
+  print $chr(27) "[H"
+  
+  ; Main loop: iterate through each row
+  let row = 0
+  do
+    let col = 0
+    do
+      ; Calculate actual coordinates for this pixel
+      let cr = xmin + [col * xstep]
+      let ci = ymin + [row * ystep]
+      
+      ; Mandelbrot iteration: count how many iterations before escape
+      let zr = 0
+      let zi = 0
+      let iter = 0
+      let escaped = 0
+      
+      do
+        ; Calculate z = z^2 + c
+        ; For complex numbers: (a+bi)^2 = a^2 - b^2 + 2abi
+        let zr_sq = zr * zr
+        let zi_sq = zi * zi
+        let mag_sq = zr_sq + zi_sq
+        
+        ; If magnitude > 2, it has escaped
+        if mag_sq <= 4 then goto not_escaped
+        let escaped = 1
+        goto iter_done
+        
+not_escaped:
+        ; Apply iteration: z_new = z^2 + c
+        let zr_new = zr_sq - zi_sq + cr
+        let zi_new = [2 * zr * zi] + ci
+        let zr = zr_new
+        let zi = zi_new
+        let iter = iter + 1
+        
+      next while iter < max_iter
+      
+iter_done:
+      ; Determine color based on iteration count
+      ; Red for high iterations (deep in set),
+      ; cycling through colors for escapes
+      
+;;      xtend hue white black
+;;      print iter
+;;      ask ":" anything
+      
+      if iter >= 70 then Xtend hue mag blk
+      if iter >= 40 then Xtend hue blu wht
+      if iter >= 20 then Xtend hue yel blu
+      if iter >= 10 then Xtend hue grn blk
+      if iter <  10 then Xtend hue red blk
+      
+      if escaped == 1 then Xtend hue blk blk
+
+      Xtend At row col
+      Print "@",iter
+      
+      
+      let col = col + 1
+    next while col < width
+    
+    ; Newline after each row
+    let row = row + 1
+    
+  next while row < height
+  
+  Xtend hue white black 
+  print "Mandelbrot set complete!"
+  
+  STOP

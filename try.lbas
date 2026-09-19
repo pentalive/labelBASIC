@@ -1,0 +1,18 @@
+;  test04 Formatting
+;  Try various formatting items
+Begin:
+
+   format "%g "
+   print "Try.lbas - a place to try things"
+   print "Test $chr(65)    :",$chr(65)
+   print "Exponentiation   :",[2^5]
+   Let x = 2^5
+   print "Result           :",x
+   print "Three of them    :",x,x,x
+   let y = 2 + 5
+   print "This should be 7 :",y
+   print "This should be 42:",42
+   print "Kinda pi         :",355/113
+   print "try is done"
+   if y == 7 then print "y is 7"
+   if y <> 7 then print "y is not 7"

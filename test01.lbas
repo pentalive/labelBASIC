@@ -1,0 +1,48 @@
+; test01.lbas
+; Basic smoke test for Label Basic
+begin:
+  Format "%+6.2f "
+
+  Let i = 0
+  Let sum = 0
+Loop:
+  Let i = i + 1
+  Let sum = sum + i
+  If i < 5 Then Goto Loop
+  Print "Sum 1..5 =", sum
+
+  MAT A(3,3)
+  Let A(0,0) = 10
+  Let A(1,1) = 20
+  Let A(2,2) = 30
+  Print "diag:", A(0,0), A(1,1), A(2,2)
+
+  Let n = 0
+  Do While n < 3
+    Print "do-while n=", n
+    Let n = n + 1
+  Next
+
+  Let m = 5
+  Do
+    Print "do-until m=", m
+    Let m = m - 1
+  Next Until m == 0
+
+  Call Greet
+  Print "back from greet"
+
+  Let x = 3.14159
+  Print "pi-ish:", x
+  Print "sin(0)=", sin(0)
+  Print "int(7.9)=", int(7.9)
+  Print "chr(65)=", $chr(65)
+  Let $letter = "A"
+  Print "asc(A)=", asc($letter)
+
+  Stop
+
+Greet:
+  Print "hello from subroutine"
+  Return
+

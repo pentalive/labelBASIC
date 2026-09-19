@@ -1,0 +1,16 @@
+Print " This should warn as i will not "
+Print " exist the when you jump into   "
+Print " the loop "
+
+begin:
+	goto middle
+	
+	let i = 0
+	do
+		print i
+
+middle:
+		let i = i + 1
+	next while i < 10
+	end
+

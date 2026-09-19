@@ -1,0 +1,17 @@
+begin:
+    format "%03g"
+    xtend cls home
+    print "press keys to see how $key() responds"
+    print "press esc to exit "
+    print "some keys are captured by the os"
+    print
+    
+    do
+blank:    
+        let $x = $key()
+        if $x == "" then goto blank
+        if $x == "Escape" then break
+        print "]",$x,"[ ",$chr(9),asc($x)
+    next
+    end
+        

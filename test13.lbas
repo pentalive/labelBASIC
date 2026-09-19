@@ -1,0 +1,33 @@
+; Test13
+; Xtend showcase: this is the kind of thing Xtend is actually good at --
+; "set a color, print things, change it again" -- not a dense grid where
+; every character needs its own color (colorgrid.lbas is the right tool
+; for that; see the note in the README).
+
+Begin:
+    Xtend CLS
+    Xtend HOME
+    
+    Xtend Hue White Blue
+    Print "  SYSTEM STATUS  "
+    Xtend Hue Black Black
+    Print ""
+    
+    Xtend Hue Green Black
+    Print "  [OK]   network"
+    Xtend Hue Yellow Black
+    Print "  [WARN] disk space low"
+    Xtend Hue Red Black
+    Print "  [FAIL] backup job"
+    Xtend Hue White Black
+    Print ""
+
+    Xtend At 10 5
+    Xtend Hue Cyan Black
+    Print "positioned status line at row 10, col 5"
+    
+    Xtend Hue White Black
+    Print ""
+    Print "back to normal"
+    
+    Stop

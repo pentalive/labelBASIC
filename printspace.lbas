@@ -1,0 +1,12 @@
+Begin:
+        Let a=2
+        Let b=4
+
+        print "Comma Separates   ",a,b
+        print "string a+string b ",$str(a)+$str(b)
+        format "%g "
+        print "change format `%g `"
+        print "Comma Separates   ",a,b
+        print "string a+string b ",$str(a)+$str(b)
+
+        end

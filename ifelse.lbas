@@ -1,0 +1,14 @@
+; ifelse
+;
+; A short program to demonstrate the use of else and break
+;
+Begin:
+    do
+        ask "Enter 5 or some other number or 0 to exit :",i
+        if i == 0 then break
+        if i == 5 then print " You gave me 5 "
+        else           print " What you gave me ain`t 5 "
+        print
+    next
+    stop
+

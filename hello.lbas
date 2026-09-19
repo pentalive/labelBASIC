@@ -1,0 +1,13 @@
+; Helord.lbas
+; Print a list of random numbers
+
+Begin:
+       format " %8.0F | "
+       let index = 1
+       do
+         let fun = rnd(9999)
+         print index,fun,"Hello World"
+         let index = index + 1
+       next until index == 12
+Done:
+       stop

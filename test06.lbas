@@ -1,0 +1,10 @@
+;Test06 - Checking variable names
+
+Begin:
+    let A7 = 87
+    let A = 8 
+    print A7," ",A
+    let break = 86
+    print "Break as a variable should be 86 ",break
+    end
+    

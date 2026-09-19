@@ -1,0 +1,43 @@
+; FizBuz
+; A programming exercise and children`s schoolroom game
+;
+
+begin:
+        xtend cls home
+        print
+        print
+        Let $output =  "-- fizbuz ------------------------------"
+        Let $output =  $output + "-------------------------------"
+        print $output
+        let num = 0
+        print nocr(),"|"
+        format "%6g|"
+        do
+            let num = num + 1
+            if num % 15 <> 0 then goto Notfizbuz
+            print nocr(),"FizBuz|"
+            goto donext
+
+Notfizbuz:
+            if num %  5 <> 0 then goto notfiz
+            print nocr(),"FIZ...|"
+            goto donext
+
+notfiz:
+            if num %  3 <> 0 then goto notbuz
+            print nocr(),"...BUZ|"
+            goto donext
+
+notbuz:
+            print nocr(),$str(num)
+donext:
+            if num % 10 <> 0 then goto again
+            print
+            print "-----------------------------------------------------------------------"
+            print nocr(),"|"
+again:            
+        next while num < 100
+
+        print
+        stop
+        

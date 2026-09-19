@@ -1,0 +1,19 @@
+; this is to check the jump into
+; the middle of a loop
+; to see the loop continues to work
+; because the address of the do is set into the next
+; at load time.
+
+begin:
+	let i = 0
+	goto middle
+	
+    let i = 0
+	do
+		print i
+
+middle:
+		let i = i + 1
+	next while i < 10
+	end
+

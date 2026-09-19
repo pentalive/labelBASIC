@@ -1,0 +1,27 @@
+; Test 11
+; String + auto-converts a bare number instead of dropping it.
+;
+
+Begin:
+     Let n = 5
+     Print "num=" + n
+     If "num=" + n == "num=5" Then Goto Ok1
+     Print "FAIL: auto-convert on concat"
+     Goto Done1
+
+Ok1:
+     Print "OK: auto-convert on concat"
+
+Done1:
+; Pure string concatenation introduces nothing extra.
+     Let $a = "hello"
+     Let $b = "world"
+     If $a + $b == "helloworld" Then Goto Ok2
+     Print "FAIL: pure concat introduced something extra"
+     Goto Done2
+
+Ok2:
+     Print "OK: pure concat is clean"
+
+Done2:
+     Stop

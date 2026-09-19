@@ -1,0 +1,45 @@
+; ANSI color grid.
+; Foreground varies down the rows (outer loop): codes 30-37
+; Background varies across each row (inner loop): codes 40-47
+; Each cell shows "ff,bb" in its own foreground/background combo.
+begin:
+ Xtend CLS
+ Xtend HOME
+ Let $esc = $chr(27) + "["
+ mat $color(8)
+ Let $color(0) = " BLK |"
+ Let $color(1) = " RED |"
+ Let $color(2) = " GRN |"
+ Let $color(3) = " YEL |"
+ Let $color(4) = " BLU |"
+ Let $color(5) = " MAG |"
+ Let $color(6) = " CYN |"
+ Let $color(7) = " WHT |"
+
+ xtend hue yel blk
+ Print
+ Print " Colorgrid - Demonstrating Xtend hue and Xtend at for screen control "
+ print "=====+========================================================== "
+ Print "vF B>|    BLK    RED    GRN    YEL    BLU    MAG    CYN    WHT     "
+ 
+ Let fg = 0
+ Do While fg < 8
+   xtend at fg+5 1
+   print $color(fg)
+
+   Let bg = 0
+   Do While bg < 8
+      xtend hue fg bg
+      xtend at fg+5  [bg*7]+9 
+      print "[",fg+30,",",bg+40,"]"
+      xtend hue yel blk
+      let bg = bg + 1
+   Next
+
+   Let fg = fg + 1
+ Next
+ xtend hue yel blk
+ xtend at 13 1
+ Print "=====+========================================================== "
+
+ Stop
