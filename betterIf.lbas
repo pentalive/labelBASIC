@@ -2,8 +2,7 @@
 ;
 ; If can now execute any other statement conditionally
 ; The next line after an if can be an `else` which
-; executes its line when the controlling if does not
-; execute its line
+; executes its statement when the controlling if does not
 ;
 ; Note - Because the Begin label is the entry point
 ; subroutines like Hello can be put before the main
@@ -15,16 +14,19 @@ Hello:
     Return
 
 Begin:
+    print "Best value for X is 3 or 5"
     ask "What is x ?",x
 
-    if x==3 then ask "What for y?",y
+    if x==3 then ask "What for y? try 17 ",y
 
     If x==5 Then Print "X is 5"
     else print "X is Not 5"
 
     If x==3 Then Let y = 17
+            Else let y = 21
 
     If y==17 Then Print "Changed Y to 17"
+             else print "Y is ",y
 
     If x==3 Then Call Hello
 
