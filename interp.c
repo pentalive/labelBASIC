@@ -363,6 +363,20 @@ static Value parsePrimary(Cur *c){
             }
         }
 
+        /* $time() - return formatted timestamp as YYYY/MM/DD-HH:MM:SS */
+        if(strcasecmp(name,"$time")==0){
+            skipws(c);
+            if(c->s[c->pos]=='(') c->pos++;
+            skipws(c);
+            if(c->s[c->pos]==')') c->pos++;
+            
+            time_t now = time(NULL);
+            struct tm *tm_info = localtime(&now);
+            char buf[32];
+            strftime(buf, sizeof(buf), "%Y/%m/%d-%H:%M:%S", tm_info);
+            return mkStr(buf);
+        }
+
         /* $front($string, $delimiter) - return part before delimiter
            if delimiter is empty: return first character
            if delimiter not found: return whole string */
@@ -1413,3 +1427,4 @@ int main(int argc, char **argv){
     }
     return 0;
 }
+

@@ -1,0 +1,4 @@
+Begin:
+    let $x = $time()
+    print $x
+    end

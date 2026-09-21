@@ -1,17 +1,17 @@
 ; xtendchain.lbas
 ; testing all the parts of Xtended chars
 ;
-Begin
-Xtend CLS HOME
- Print "after CLS HOME (space-separated)"
+Begin:
+    Xtend CLS HOME
+    Print "after CLS HOME (space-separated)"
 
- Xtend CLS, HOME
- Print "after CLS, HOME (comma-separated)"
+    Xtend CLS, HOME
+    Print "after CLS, HOME (comma-separated)"
 
- Xtend Hue Red Black CLS HOME At 3 3
- Print "after a 4-command chain"
+    Xtend Hue Red Black CLS HOME At 3 3
+    Print "after a 4-command chain"
 
- Xtend CLS
- Xtend HOME
- Print "two separate lines still work too"
- Stop
+    Xtend CLS
+    Xtend HOME
+    Print "two separate lines still work too"
+    Stop

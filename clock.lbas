@@ -1,0 +1,25 @@
+
+Begin:
+    xtend cls
+
+    let pl = 1
+
+    do
+        xtend home
+        print ""
+        let $thetime = $time()
+        xtend cls
+        xtend AT pl pl 
+        print "clock ",$thetime," ",nocr()
+
+; loop for the next second
+        do
+            let $nt = $time()
+            if $nt <> $thetime then break
+        next
+        let pl = pl + 1
+        if pl > 23 then let pl = 1
+
+    next
+
+    end
