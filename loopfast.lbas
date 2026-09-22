@@ -5,5 +5,5 @@ Begin:
         let i = i + 1
         let $p = $n
         print $p
-    next
+    next while i < 11
     end

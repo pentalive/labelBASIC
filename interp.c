@@ -314,7 +314,15 @@ static Value parsePrimary(Cur *c){
                 skipws(c);
                 if(c->s[c->pos]==')') c->pos++;
                 /* if test is nonzero, return pass, else return fail */
-                return (test.num != 0) ? pass : fail;
+                Value result = (test.num != 0) ? pass : fail;
+                /* Free the two branches we didn't return */
+                if((test.num != 0) ? 0 : 1){
+                    if(pass.isStr && pass.str) free(pass.str);
+                } else {
+                    if(fail.isStr && fail.str) free(fail.str);
+                }
+                if(test.isStr && test.str) free(test.str);
+                return result;
             }
         }
 
@@ -339,26 +347,32 @@ static Value parsePrimary(Cur *c){
                 skipws(c);
                 if(c->s[c->pos]==')') c->pos++;
             }
-            if(strcasecmp(name,"sin")==0) return mkNum(sin(arg.num));
-            if(strcasecmp(name,"cos")==0) return mkNum(cos(arg.num));
-            if(strcasecmp(name,"tan")==0) return mkNum(tan(arg.num));
-            if(strcasecmp(name,"int")==0) return mkNum(trunc(arg.num));
+            if(strcasecmp(name,"sin")==0) { double r = sin(arg.num); if(arg.isStr && arg.str) free(arg.str); return mkNum(r); }
+            if(strcasecmp(name,"cos")==0) { double r = cos(arg.num); if(arg.isStr && arg.str) free(arg.str); return mkNum(r); }
+            if(strcasecmp(name,"tan")==0) { double r = tan(arg.num); if(arg.isStr && arg.str) free(arg.str); return mkNum(r); }
+            if(strcasecmp(name,"int")==0) { double r = trunc(arg.num); if(arg.isStr && arg.str) free(arg.str); return mkNum(r); }
             if(strcasecmp(name,"rnd")==0){
                 int mx = (int)arg.num;
                 if(mx<=0) mx=1;
-                return mkNum((double)(rand()%mx));
+                double r = (double)(rand()%mx);
+                if(arg.isStr && arg.str) free(arg.str);
+                return mkNum(r);
             }
             if(strcasecmp(name,"asc")==0){
-                if(arg.isStr && arg.str && arg.str[0]) return mkNum((double)(unsigned char)arg.str[0]);
-                return mkNum(0);
+                double r = 0;
+                if(arg.isStr && arg.str && arg.str[0]) r = (double)(unsigned char)arg.str[0];
+                if(arg.isStr && arg.str) free(arg.str);
+                return mkNum(r);
             }
             if(strcasecmp(name,"$chr")==0){
                 char buf[2]; buf[0]=(char)(int)arg.num; buf[1]=0;
+                if(arg.isStr && arg.str) free(arg.str);
                 return mkStr(buf);
             }
             if(strcasecmp(name,"$str")==0){
                 char buf[64];
                 numToStr(arg.num, buf, sizeof(buf));
+                if(arg.isStr && arg.str) free(arg.str);
                 return mkStr(buf);
             }
         }
@@ -621,7 +635,9 @@ static Value parsePrimary(Cur *c){
                 c->pos++;
                 Value i2 = parseOr(c);
                 idx2 = (int)i2.num;
+                if(i2.isStr && i2.str) free(i2.str);
             }
+            if(i1.isStr && i1.str) free(i1.str);
             skipws(c);
             if(c->s[c->pos]==')') c->pos++;
             if(!a) die("undeclared array (use MAT to declare)", c->lineno);
@@ -929,7 +945,13 @@ static void assignTo(Cur *c, Value rhs, int lineno){
         Value i1 = parseOr(c);
         int idx1=(int)i1.num, idx2=0;
         skipws(c);
-        if(c->s[c->pos]==','){ c->pos++; Value i2=parseOr(c); idx2=(int)i2.num; }
+        if(c->s[c->pos]==','){
+            c->pos++;
+            Value i2=parseOr(c);
+            idx2=(int)i2.num;
+            if(i2.isStr && i2.str) free(i2.str);
+        }
+        if(i1.isStr && i1.str) free(i1.str);
         skipws(c);
         if(c->s[c->pos]==')') c->pos++;
         if(idx1<0||idx1>=a->rows||idx2<0||idx2>=a->cols) die("array index out of range", lineno);
@@ -1196,6 +1218,15 @@ static int execStatement(const char *raw,int pc){
         skipws(&c);
         int save=c.pos;
         /* find '=' that isn't part of == */
+        Cur c2=c;
+        for(;;){
+            skipws(&c2);
+            if(c2.s[c2.pos]==0) break;
+            if(c2.s[c2.pos]=='=' && c2.s[c2.pos+1]!='=') break;
+            if(c2.s[c2.pos]=='<' && c2.s[c2.pos+1]=='>' && ++c2.pos) c2.pos++;
+            else c2.pos++;
+        }
+        if(c2.s[c2.pos]!='=') die("Let without '='", pc);
         /* simplest: locate var name, then require '=' */
         char vname[64];
         int nstart=c.pos;
@@ -1210,25 +1241,25 @@ static int execStatement(const char *raw,int pc){
         c.pos = save; /* rewind, let assignTo re-parse name+optional index */
         skipws(&c);
         /* re-scan to '=' */
-        Cur c2 = c;
+        Cur c2_rescan = c;
         /* move c2 past name (and array index if present) to find '=' */
-        if(c2.s[c2.pos]=='$') c2.pos++;
-        while(isalnum((unsigned char)c2.s[c2.pos])||c2.s[c2.pos]=='_') c2.pos++;
+        if(c2_rescan.s[c2_rescan.pos]=='$') c2_rescan.pos++;
+        while(isalnum((unsigned char)c2_rescan.s[c2_rescan.pos])||c2_rescan.s[c2_rescan.pos]=='_') c2_rescan.pos++;
         if(isArrTarget){
-            skipws(&c2);
-            if(c2.s[c2.pos]=='('){
+            skipws(&c2_rescan);
+            if(c2_rescan.s[c2_rescan.pos]=='('){
                 int depth=0;
                 do{
-                    if(c2.s[c2.pos]=='(') depth++;
-                    else if(c2.s[c2.pos]==')') depth--;
-                    c2.pos++;
-                } while(c2.s[c2.pos] && depth>0);
+                    if(c2_rescan.s[c2_rescan.pos]=='(') depth++;
+                    else if(c2_rescan.s[c2_rescan.pos]==')') depth--;
+                    c2_rescan.pos++;
+                } while(c2_rescan.s[c2_rescan.pos] && depth>0);
             }
         }
-        skipws(&c2);
-        if(c2.s[c2.pos]!='=') die("expected '=' in Let", pc);
-        c2.pos++;
-        Value rhs = parseOr(&c2);
+        skipws(&c2_rescan);
+        if(c2_rescan.s[c2_rescan.pos]!='=') die("expected '=' in Let", pc);
+        c2_rescan.pos++;
+        Value rhs = parseOr(&c2_rescan);
         (void)savePos;
         assignTo(&c, rhs, pc);
         if(rhs.isStr && rhs.str) free(rhs.str);  /* free temporary string from expression */
@@ -1285,6 +1316,7 @@ static int execStatement(const char *raw,int pc){
             first=0;
             if(v.isStr) fprintf(g_out, "%s", v.str? v.str:"");
             else printNum(v.num);
+            if(v.isStr && v.str) free(v.str);  /* free temporary string from expression */
             skipws(&c);
             if(c.s[c.pos]==','){ c.pos++; continue; }
             break;
