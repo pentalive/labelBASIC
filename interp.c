@@ -663,6 +663,8 @@ static Value parseExponent(Cur *c){
             c->pos++;
             Value r = parseUnary(c);
             double res = pow(l.num, r.num);
+            if(l.isStr && l.str) free(l.str);
+            if(r.isStr && r.str) free(r.str);
             l = mkNum(res);
         } else break;
     }
@@ -681,6 +683,8 @@ static Value parseMul(Cur *c){
             if(op=='*') res = l.num*r.num;
             else if(op=='/') res = r.num!=0 ? l.num/r.num : 0;
             else res = r.num!=0 ? fmod(l.num,r.num) : 0;
+            if(l.isStr && l.str) free(l.str);
+            if(r.isStr && r.str) free(r.str);
             l = mkNum(res);
         } else break;
     }
@@ -711,10 +715,14 @@ static Value parseAdd(Cur *c){
                                            silently truncated by snprintf, not
                                            an error -- see LINELEN's comment. */
                     snprintf(buf,sizeof(buf),"%s%s",ls,rs);
+                    if(l.isStr && l.str) free(l.str);
+                    if(r.isStr && r.str) free(r.str);
                     l = mkStr(buf);
                     continue;
                 }
             }
+            if(l.isStr && l.str) free(l.str);
+            if(r.isStr && r.str) free(r.str);
             l = mkNum(op=='+' ? l.num+r.num : l.num-r.num);
         } else break;
     }
@@ -737,10 +745,38 @@ static Value parseRelational(Cur *c){
     Value l = parseAdd(c);
     skipws(c);
     if(strncmp(c->s+c->pos,"<>",2)==0) return l; /* not-equal belongs to the equality tier */
-    if(strncmp(c->s+c->pos,"<=",2)==0){ c->pos+=2; Value r=parseAdd(c); return mkNum(cmpValues(l,r)<=0); }
-    if(strncmp(c->s+c->pos,">=",2)==0 || strncmp(c->s+c->pos,"=>",2)==0){ c->pos+=2; Value r=parseAdd(c); return mkNum(cmpValues(l,r)>=0); }
-    if(c->s[c->pos]=='<'){ c->pos++; Value r=parseAdd(c); return mkNum(cmpValues(l,r)<0); }
-    if(c->s[c->pos]=='>'){ c->pos++; Value r=parseAdd(c); return mkNum(cmpValues(l,r)>0); }
+    if(strncmp(c->s+c->pos,"<=",2)==0){
+        c->pos+=2;
+        Value r=parseAdd(c);
+        int result = cmpValues(l,r)<=0;
+        if(l.isStr && l.str) free(l.str);
+        if(r.isStr && r.str) free(r.str);
+        return mkNum(result);
+    }
+    if(strncmp(c->s+c->pos,">=",2)==0 || strncmp(c->s+c->pos,"=>",2)==0){
+        c->pos+=2;
+        Value r=parseAdd(c);
+        int result = cmpValues(l,r)>=0;
+        if(l.isStr && l.str) free(l.str);
+        if(r.isStr && r.str) free(r.str);
+        return mkNum(result);
+    }
+    if(c->s[c->pos]=='<'){
+        c->pos++;
+        Value r=parseAdd(c);
+        int result = cmpValues(l,r)<0;
+        if(l.isStr && l.str) free(l.str);
+        if(r.isStr && r.str) free(r.str);
+        return mkNum(result);
+    }
+    if(c->s[c->pos]=='>'){
+        c->pos++;
+        Value r=parseAdd(c);
+        int result = cmpValues(l,r)>0;
+        if(l.isStr && l.str) free(l.str);
+        if(r.isStr && r.str) free(r.str);
+        return mkNum(result);
+    }
     return l;
 }
 
@@ -749,8 +785,22 @@ static Value parseEquality(Cur *c){
     Value l = parseRelational(c);
     for(;;){
         skipws(c);
-        if(strncmp(c->s+c->pos,"==",2)==0){ c->pos+=2; Value r=parseRelational(c); l=mkNum(cmpValues(l,r)==0); }
-        else if(strncmp(c->s+c->pos,"<>",2)==0){ c->pos+=2; Value r=parseRelational(c); l=mkNum(cmpValues(l,r)!=0); }
+        if(strncmp(c->s+c->pos,"==",2)==0){
+            c->pos+=2;
+            Value r=parseRelational(c);
+            int result = cmpValues(l,r)==0;
+            if(l.isStr && l.str) free(l.str);
+            if(r.isStr && r.str) free(r.str);
+            l=mkNum(result);
+        }
+        else if(strncmp(c->s+c->pos,"<>",2)==0){
+            c->pos+=2;
+            Value r=parseRelational(c);
+            int result = cmpValues(l,r)!=0;
+            if(l.isStr && l.str) free(l.str);
+            if(r.isStr && r.str) free(r.str);
+            l=mkNum(result);
+        }
         else break;
     }
     return l;
@@ -1181,6 +1231,7 @@ static int execStatement(const char *raw,int pc){
         Value rhs = parseOr(&c2);
         (void)savePos;
         assignTo(&c, rhs, pc);
+        if(rhs.isStr && rhs.str) free(rhs.str);  /* free temporary string from expression */
         return -1;
     }
 
@@ -1311,6 +1362,7 @@ static int execStatement(const char *raw,int pc){
             skipws(&c);
             if(c.s[c.pos]==',') c.pos++; /* optional comma between chained sub-commands */
         }
+        fflush(g_out);  /* ensure escape sequences are sent to terminal immediately */
         return -1;
     }
 
@@ -1427,4 +1479,3 @@ int main(int argc, char **argv){
     }
     return 0;
 }
-

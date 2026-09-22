@@ -1,21 +1,18 @@
 
 Begin:
     xtend cls
-
     let pl = 1
-
+   
     do
-        xtend home
-        print ""
         let $thetime = $time()
         xtend cls
-        xtend AT pl pl 
-        print "clock ",$thetime," ",nocr()
+        xtend at pl pl 
+        print "clock ",$thetime
 
 ; loop for the next second
         do
-            let $nt = $time()
-            if $nt <> $thetime then break
+            
+            if $time() <> $thetime then break
         next
         let pl = pl + 1
         if pl > 23 then let pl = 1

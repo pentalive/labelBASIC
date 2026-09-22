@@ -1,0 +1,9 @@
+Begin:
+    let i = 1
+    do
+        let $n = i
+        let i = i + 1
+        let $p = $n
+        print $p
+    next
+    end
