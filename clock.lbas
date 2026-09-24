@@ -6,7 +6,7 @@ Begin:
     do
         let $thetime = $time()
         xtend cls
-        xtend at pl pl 
+        xtend at pl pl*2 
         print "clock ",$thetime
 
 ; loop for the next second

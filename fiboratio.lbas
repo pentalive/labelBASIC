@@ -1,0 +1,26 @@
+; fiboratio
+;
+; steps through the Fibbonacci series computing the ratio of
+; adjacent members. Eventually this converges on the
+; Golden Ratio
+;
+Begin:
+        let a = 1
+        let b = 1
+        let n = 2
+        Do
+            let c = a + b
+            format "F(%'5.0f): "
+            print n,nocr()
+            format "%'40.0f  "
+            print c,nocr()
+            format "%15.7f  "
+            print a/b,nocr()
+            ask pause
+            if pause <> 0 then break
+            let b = a
+            let a = c
+            let n = n + 1
+        next
+
+        end
